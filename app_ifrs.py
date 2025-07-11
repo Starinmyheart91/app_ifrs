@@ -1,150 +1,72 @@
-# ifrs_quiz.py
 import streamlit as st
+from datetime import datetime
+import pandas as pd
+import csv
 
+# ------------------- CẤU HÌNH ------------------- #
+DEADLINE = datetime(2025, 7, 15, 22, 0, 0)  # thời điểm đóng bài test
+CSV_FILE = "results.csv"
+
+# ------------------- DANH SÁCH CÂU HỎI ------------------- #
 questions = [
-    {
-        "question": "IFRS 1 relates to:",
-        "options": ["A. Insurance contracts", "B. First-time adoption", "C. Borrowing costs", "D. Revenue"],
-        "answer": "B"
-    },
-    {
-        "question": "IFRS 2 is about:",
-        "options": ["A. Inventory", "B. Employee benefits", "C. Share-based payment", "D. Tax"],
-        "answer": "C"
-    },
-    {
-        "question": "Which standard governs business combinations?",
-        "options": ["A. IFRS 3", "B. IAS 1", "C. IFRS 9", "D. IFRS 15"],
-        "answer": "A"
-    },
-    {
-        "question": "IFRS 9 deals with:",
-        "options": ["A. Property", "B. Financial instruments", "C. Intangible assets", "D. Leases"],
-        "answer": "B"
-    },
-    {
-        "question": "Which IFRS governs revenue from contracts with customers?",
-        "options": ["A. IFRS 15", "B. IFRS 16", "C. IAS 18", "D. IAS 7"],
-        "answer": "A"
-    },
-    {
-        "question": "Leases are covered under:",
-        "options": ["A. IFRS 15", "B. IFRS 16", "C. IAS 17", "D. IAS 38"],
-        "answer": "B"
-    },
-    {
-        "question": "IFRS 17 relates to:",
-        "options": ["A. Financial instruments", "B. Intangible assets", "C. Insurance contracts", "D. Agriculture"],
-        "answer": "C"
-    },
-    {
-        "question": "IAS 1 deals with:",
-        "options": ["A. Inventory", "B. Presentation of financial statements", "C. Cash flows", "D. Tax"],
-        "answer": "B"
-    },
-    {
-        "question": "IAS 2 provides guidance on:",
-        "options": ["A. Agriculture", "B. Inventory", "C. Deferred tax", "D. PPE"],
-        "answer": "B"
-    },
-    {
-        "question": "Which standard governs statement of cash flows?",
-        "options": ["A. IAS 7", "B. IAS 1", "C. IFRS 10", "D. IAS 12"],
-        "answer": "A"
-    },
-    {
-        "question": "Accounting policies and errors are covered in:",
-        "options": ["A. IAS 1", "B. IAS 8", "C. IAS 16", "D. IFRS 3"],
-        "answer": "B"
-    },
-    {
-        "question": "Events after the reporting period are defined in:",
-        "options": ["A. IAS 12", "B. IAS 10", "C. IAS 2", "D. IAS 36"],
-        "answer": "B"
-    },
-    {
-        "question": "Which IAS covers income taxes?",
-        "options": ["A. IAS 10", "B. IFRS 9", "C. IAS 12", "D. IFRS 16"],
-        "answer": "C"
-    },
-    {
-        "question": "IAS 16 governs:",
-        "options": ["A. Employee benefits", "B. Intangible assets", "C. Property, Plant and Equipment", "D. Financial instruments"],
-        "answer": "C"
-    },
-    {
-        "question": "Employee benefits are handled under:",
-        "options": ["A. IAS 19", "B. IAS 38", "C. IAS 2", "D. IFRS 2"],
-        "answer": "A"
-    },
-    {
-        "question": "IAS 21 focuses on:",
-        "options": ["A. Leases", "B. Foreign exchange", "C. Provisions", "D. Revenue"],
-        "answer": "B"
-    },
-    {
-        "question": "Borrowing costs are regulated by:",
-        "options": ["A. IFRS 7", "B. IAS 23", "C. IFRS 9", "D. IAS 28"],
-        "answer": "B"
-    },
-    {
-        "question": "Which standard requires related party disclosures?",
-        "options": ["A. IFRS 12", "B. IAS 24", "C. IAS 21", "D. IAS 38"],
-        "answer": "B"
-    },
-    {
-        "question": "Which IAS addresses investments in associates?",
-        "options": ["A. IAS 27", "B. IAS 28", "C. IFRS 10", "D. IAS 19"],
-        "answer": "B"
-    },
-    {
-        "question": "Which standard covers impairment of assets?",
-        "options": ["A. IAS 36", "B. IFRS 9", "C. IAS 12", "D. IFRS 5"],
-        "answer": "A"
-    },
-    {
-        "question": "IAS 37 deals with:",
-        "options": ["A. Provisions and contingencies", "B. Revenue", "C. PPE", "D. Leases"],
-        "answer": "A"
-    },
-    {
-        "question": "Which IAS governs intangible assets?",
-        "options": ["A. IAS 16", "B. IAS 38", "C. IFRS 15", "D. IFRS 3"],
-        "answer": "B"
-    },
-    {
-        "question": "Investment properties are covered under:",
-        "options": ["A. IAS 40", "B. IFRS 9", "C. IAS 12", "D. IFRS 16"],
-        "answer": "A"
-    },
-    {
-        "question": "Which IAS deals with agriculture and biological assets?",
-        "options": ["A. IAS 36", "B. IAS 41", "C. IFRS 17", "D. IAS 8"],
-        "answer": "B"
-    }
+    {"question": "IFRS 1 is about:", "options": ["First-time Adoption of IFRS", "Share-based Payment", "Business Combinations"], "answer": "First-time Adoption of IFRS"},
+    {"question": "IFRS 2 relates to:", "options": ["Leases", "Share-based Payment", "Revenue"], "answer": "Share-based Payment"},
+    {"question": "IFRS 3 covers:", "options": ["Business Combinations", "Financial Instruments", "Agriculture"], "answer": "Business Combinations"},
+    {"question": "IFRS 15 is about:", "options": ["Leases", "Revenue from Contracts with Customers", "Operating Segments"], "answer": "Revenue from Contracts with Customers"},
+    {"question": "IAS 2 deals with:", "options": ["Inventory", "Cash Flow", "Leases"], "answer": "Inventory"}
 ]
 
-st.set_page_config(page_title="IFRS Quiz", page_icon="??")
-st.title("?? IFRS Quiz Application")
-st.markdown("Test your knowledge of international financial reporting standards!")
+# ------------------- KIỂM TRA DEADLINE ------------------- #
+now = datetime.now()
+if now > DEADLINE:
+    st.title("⛔ Bài kiểm tra đã đóng")
+    st.info("Kết quả các thí sinh đã nộp:")
+    try:
+        df = pd.read_csv(CSV_FILE)
+        st.dataframe(df)
+        csv = df.to_csv(index=False).encode('utf-8')
+        st.download_button("📥 Tải kết quả CSV", csv, "results.csv", "text/csv")
+    except FileNotFoundError:
+        st.warning("Chưa có kết quả nào được ghi nhận.")
+    st.stop()
 
+# ------------------- NHẬP THÔNG TIN THÍ SINH ------------------- #
+st.title("📋 IFRS Quiz - Trắc nghiệm chuẩn mực quốc tế")
+name = st.text_input("👤 Họ và tên")
+phone = st.text_input("📱 Số điện thoại")
+
+if not name or not phone:
+    st.warning("Vui lòng nhập đầy đủ họ tên và số điện thoại để bắt đầu bài test.")
+    st.stop()
+
+st.success("✅ Thông tin đã được ghi nhận. Bắt đầu làm bài!")
+
+# ------------------- HIỂN THỊ CÂU HỎI ------------------- #
+st.subheader("📝 Câu hỏi")
 score = 0
 user_answers = []
 
 for idx, q in enumerate(questions):
-    st.subheader(f"Question {idx + 1}: {q['question']}")
-    selected = st.radio("Choose one:", q["options"], key=idx, index=None)
-    user_answers.append((selected, q["answer"]))
+    st.write(f"**Câu {idx + 1}: {q['question']}**")
+    answer = st.radio("Chọn 1 đáp án:", q['options'], key=f"q{idx}", index=None)
+    user_answers.append((q['question'], answer))
+    if answer == q['answer']:
+        score += 1
 
-if st.button("Submit Quiz"):
-    for i, (selected, correct) in enumerate(user_answers):
-        if selected.startswith(correct):
-            score += 1
-    st.success(f"? You scored: {score} / {len(questions)}")
-    if score == len(questions):
-        st.balloons()
-        st.info("?? Excellent! You mastered this set.")
-    elif score >= 20:
-        st.info("?? Good job! Review and try again.")
-    else:
-        st.warning("?? Keep practicing!")
+# ------------------- NỘP BÀI ------------------- #
+if st.button("📨 Nộp bài"):
+    st.success(f"🎉 {name}, bạn đã làm đúng {score}/{len(questions)} câu.")
+
+    # Ghi vào file CSV
+    with open(CSV_FILE, "a", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        writer.writerow([datetime.now(), name, phone, score])
+
+    # Hiển thị lại chi tiết câu trả lời
+    st.subheader("📄 Chi tiết bài làm:")
+    for i, (question, answer) in enumerate(user_answers):
+        correct = questions[i]['answer']
+        st.write(f"{i+1}. {question}")
+        st.write(f"- ✅ Đáp án đúng: {correct}")
+        st.write(f"- 📝 Bạn chọn: {answer if answer else 'Không chọn'}")
+        st.markdown("---")
