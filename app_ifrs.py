@@ -70,3 +70,11 @@ if st.button("📨 Nộp bài"):
         st.write(f"- ✅ Đáp án đúng: {correct}")
         st.write(f"- 📝 Bạn chọn: {answer if answer else 'Không chọn'}")
         st.markdown("---")
+with st.expander("📊 Xem kết quả đã nộp"):
+    try:
+        df = pd.read_csv(CSV_FILE)
+        st.dataframe(df)
+        csv = df.to_csv(index=False).encode("utf-8")
+        st.download_button("⬇ Tải kết quả", csv, "results.csv", "text/csv")
+    except FileNotFoundError:
+        st.info("Chưa có kết quả nào được ghi nhận.")
